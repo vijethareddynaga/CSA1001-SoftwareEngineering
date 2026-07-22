@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>College Attendance System</title>
+
+    <style>
+        body{
+            font-family:Arial;
+            background:#f2f2f2;
+            text-align:center;
+        }
+
+        .container{
+            width:600px;
+            margin:auto;
+            background:white;
+            padding:20px;
+            border-radius:10px;
+            box-shadow:0px 0px 10px gray;
+        }
+
+        input,select,button{
+            width:90%;
+            padding:10px;
+            margin:8px;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            margin-top:20px;
+        }
+
+        table,th,td{
+            border:1px solid black;
+        }
+
+        th{
+            background:#007BFF;
+            color:white;
+        }
+
+        th,td{
+            padding:10px;
+        }
+
+        .dashboard{
+            display:flex;
+            justify-content:space-around;
+            margin:20px;
+        }
+
+        .card{
+            background:#e8f4ff;
+            padding:15px;
+            width:150px;
+            border-radius:10px;
+            font-size:18px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>College Attendance Management System</h1>
+
+<div class="dashboard">
+
+<div class="card">
+Present
+<h2 id="presentCount">0</h2>
+</div>
+
+<div class="card">
+Absent
+<h2 id="absentCount">0</h2>
+</div>
+
+</div>
+
+<input type="text" id="roll" placeholder="Enter Roll Number">
+
+<input type="text" id="name" placeholder="Enter Student Name">
+
+<select id="status">
+<option value="Present">Present</option>
+<option value="Absent">Absent</option>
+</select>
+
+<button onclick="markAttendance()">Mark Attendance</button>
+
+<table>
+
+<tr>
+<th>Roll No</th>
+<th>Name</th>
+<th>Status</th>
+</tr>
+
+<tbody id="attendanceTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+<script>
+
+let present=0;
+let absent=0;
+
+function markAttendance(){
+
+let roll=document.getElementById("roll").value;
+let name=document.getElementById("name").value;
+let status=document.getElementById("status").value;
+
+if(roll=="" || name=="")
+{
+    alert("Please enter Roll Number and Name");
+    return;
+}
+
+let table=document.getElementById("attendanceTable");
+
+let row=table.insertRow();
+
+row.insertCell(0).innerHTML=roll;
+row.insertCell(1).innerHTML=name;
+row.insertCell(2).innerHTML=status;
+
+if(status=="Present")
+{
+    present++;
+}
+else
+{
+    absent++;
+}
+
+document.getElementById("presentCount").innerHTML=present;
+document.getElementById("absentCount").innerHTML=absent;
+
+document.getElementById("roll").value="";
+document.getElementById("name").value="";
+document.getElementById("status").value="Present";
+
+}
+
+</script>
+
+</body>
+</html>

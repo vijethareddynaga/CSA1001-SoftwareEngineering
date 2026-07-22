@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Parking System</title>
+<style>
+body{font-family:Arial;background:#eef2f7;margin:0;padding:20px}
+h1{text-align:center;color:#0b5ed7}
+.dashboard{display:flex;gap:20px;justify-content:center;margin:20px}
+.card{background:#fff;padding:15px 25px;border-radius:8px;box-shadow:0 2px 8px #bbb;text-align:center}
+#parking{display:grid;grid-template-columns:repeat(5,120px);gap:15px;justify-content:center;margin:20px}
+.slot{height:80px;border-radius:8px;color:#fff;font-weight:bold;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.available{background:#28a745}
+.booked{background:#dc3545}
+form{background:#fff;padding:20px;border-radius:8px;max-width:420px;margin:20px auto;box-shadow:0 2px 8px #bbb}
+input,select,button{width:100%;padding:8px;margin:6px 0}
+table{border-collapse:collapse;width:90%;margin:20px auto;background:#fff}
+th,td{border:1px solid #aaa;padding:8px;text-align:center}
+th{background:#0b5ed7;color:#fff}
+</style>
+</head>
+<body>
+
+<h1>🚗 Smart Parking Management System</h1>
+
+<div class="dashboard">
+<div class="card"><h3>Total</h3><h2>20</h2></div>
+<div class="card"><h3>Available</h3><h2 id="avail">20</h2></div>
+<div class="card"><h3>Booked</h3><h2 id="booked">0</h2></div>
+</div>
+
+<div id="parking"></div>
+
+<form id="bookingForm">
+<h2 align="center">Book Parking Slot</h2>
+<input id="name" placeholder="Name" required>
+<input id="vehicle" placeholder="Vehicle Number" required>
+<input id="phone" placeholder="Phone Number" required>
+<select id="slotSelect"></select>
+<button type="button" onclick="bookSlot()">Book Slot</button>
+</form>
+
+<table>
+<thead>
+<tr><th>Name</th><th>Vehicle</th><th>Phone</th><th>Slot</th></tr>
+</thead>
+<tbody id="history"></tbody>
+</table>
+
+<script>
+const parking=document.getElementById("parking");
+const select=document.getElementById("slotSelect");
+let available=20, booked=0;
+const status={};
+const slots=[];
+["A","B","C","D"].forEach(r=>{for(let i=1;i<=5;i++) slots.push(r+i);});
+slots.forEach(s=>{
+ status[s]="available";
+ const d=document.createElement("div");
+ d.id=s;
+ d.className="slot available";
+ d.innerHTML=s+"<br>Available";
+ parking.appendChild(d);
+ const op=document.createElement("option");
+ op.value=s; op.text=s;
+ select.appendChild(op);
+});
+function refreshSelect(){
+ select.innerHTML="";
+ slots.forEach(s=>{
+  if(status[s]=="available"){
+   let op=document.createElement("option");
+   op.value=s; op.text=s;
+   select.appendChild(op);
+  }
+ });
+}
+function bookSlot(){
+ const name=document.getElementById("name").value.trim();
+ const vehicle=document.getElementById("vehicle").value.trim();
+ const phone=document.getElementById("phone").value.trim();
+ const slot=select.value;
+ if(!name||!vehicle||!phone){alert("Please fill all details.");return;}
+ if(status[slot]=="booked"){alert("Slot already booked.");return;}
+ status[slot]="booked";
+ const cell=document.getElementById(slot);
+ cell.className="slot booked";
+ cell.innerHTML=slot+"<br>Booked";
+ available--; booked++;
+ document.getElementById("avail").innerText=available;
+ document.getElementById("booked").innerText=booked;
+ const row=document.getElementById("history").insertRow();
+ row.insertCell().innerText=name;
+ row.insertCell().innerText=vehicle;
+ row.insertCell().innerText=phone;
+ row.insertCell().innerText=slot;
+ document.getElementById("bookingForm").reset();
+ refreshSelect();
+ alert("Booking Successful! Slot: "+slot);
+}
+refreshSelect();
+</script>
+
+</body>
+</html>
